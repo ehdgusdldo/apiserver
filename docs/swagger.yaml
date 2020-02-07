@@ -1,0 +1,346 @@
+definitions:
+  models.Custom:
+    properties:
+      appryn:
+        example: "Y"
+        type: string
+      basadr:
+        example: 서울특별시 강서구 화곡로 12
+        type: string
+      compno:
+        example: "17282718127"
+        type: string
+      createdat:
+        example: "2020-01-29 13:10:39"
+        type: string
+      custrec:
+        example: --
+        type: string
+      dtladr:
+        example: 심당빌딩 3층 302호
+        type: string
+      eid:
+        example: SAMSUNG
+        type: string
+      id:
+        example: 1
+        type: integer
+      name:
+        example: 삼성
+        type: string
+      orgid:
+        example: 2
+        type: integer
+      postno:
+        example: "10414"
+        type: string
+      reptnm:
+        example: 고영호
+        type: string
+      type:
+        example: 1
+        type: integer
+      updatedat:
+        example: "2020-01-29 13:10:39"
+        type: string
+      useyn:
+        example: "Y"
+        type: string
+    type: object
+  models.FailedMessage:
+    properties:
+      err:
+        type: object
+      message:
+        example: failed
+        type: string
+    type: object
+  models.Message:
+    properties:
+      message:
+        example: success
+        type: string
+    type: object
+  models.Users:
+    properties:
+      admin:
+        example: 1
+        type: integer
+      createdat:
+        example: TIMESTAMP
+        type: string
+      custid:
+        example: 23
+        type: integer
+      dept:
+        example: 경영지원팀
+        type: string
+      email:
+        example: example@example.com
+        type: string
+      gfid:
+        example: 12
+        type: integer
+      id:
+        example: 4
+        type: integer
+      name:
+        example: 강준구
+        type: string
+      phone:
+        example: "01012341234"
+        type: string
+      position:
+        example: 사원
+        type: string
+      pwd:
+        example: abcd1234
+        type: string
+      updatedat:
+        example: SAMSUNG
+        type: string
+      userrec:
+        example: 비고
+        type: string
+      useyn:
+        example: "Y"
+        type: string
+    type: object
+info:
+  contact: {}
+  license: {}
+paths:
+  /customs:
+    get:
+      consumes:
+      - application/json
+      description: 전체고객 목록조회
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Custom'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.FailedMessage'
+      tags:
+      - Custom
+    post:
+      consumes:
+      - application/json
+      description: 고객등록
+      parameters:
+      - description: 기본키 원랜입력안해야함
+        in: body
+        name: id
+        required: true
+        schema:
+          type: integer
+      - description: 고객아이디 ex SAMSUNG
+        in: body
+        name: eid
+        required: true
+        schema:
+          type: string
+      - description: 고객명 ex 삼성
+        in: body
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: 우편번호10자이내
+        in: body
+        name: postno
+        required: true
+        schema:
+          type: string
+      - description: 기본주소
+        in: body
+        name: basadr
+        required: true
+        schema:
+          type: string
+      - description: 상세주소
+        in: body
+        name: dtladr
+        required: true
+        schema:
+          type: string
+      - description: 사업자여부 1 or 0
+        in: body
+        name: type
+        required: true
+        schema:
+          type: integer
+      - description: 그라파나 회사 pk 입력안해야함원랜
+        in: body
+        name: orgid
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.FailedMessage'
+      tags:
+      - Custom
+  /customs/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 고객 id로 고객 단일조회
+      operationId: get-string-by-int
+      parameters:
+      - description: 고객아이디
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Custom'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.FailedMessage'
+      summary: '{id}고객아이디'
+      tags:
+      - Custom
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: 전체사용자 목록조회
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Users'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.FailedMessage'
+      tags:
+      - User
+    post:
+      consumes:
+      - application/json
+      description: 사용자추가
+      parameters:
+      - description: 사용자명
+        in: body
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: 비밀번호
+        in: body
+        name: pwd
+        required: true
+        schema:
+          type: string
+      - description: 연락처
+        in: body
+        name: phone
+        required: true
+        schema:
+          type: string
+      - description: email
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      - description: "1"
+        in: body
+        name: admin
+        required: true
+        schema:
+          type: integer
+      - description: "13"
+        in: body
+        name: custID
+        required: true
+        schema:
+          type: integer
+      - description: "2"
+        in: body
+        name: gfId
+        required: true
+        schema:
+          type: integer
+      - description: 부서
+        in: body
+        name: dept
+        schema:
+          type: string
+      - description: 직급
+        in: body
+        name: position
+        schema:
+          type: string
+      - description: 비고
+        in: body
+        name: rec
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Message'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.FailedMessage'
+      tags:
+      - User
+  /users/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 사용자 id로 사용자 단일조회
+      operationId: get-string-by-int
+      parameters:
+      - description: 사용자아이디
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Users'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.FailedMessage'
+      summary: '{id} 사용자아이디'
+      tags:
+      - User
+swagger: "2.0"

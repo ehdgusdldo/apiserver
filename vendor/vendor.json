@@ -1,0 +1,12 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"path": "github.com/gin-gonic/gin",
+			"revision": "1.5",
+			"version": "1.4"
+		}
+	],
+	"rootPath": "github.com/ehdgusdldo/APIServer"
+}
