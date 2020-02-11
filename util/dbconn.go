@@ -10,8 +10,10 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// Engine object
 var Engine *xorm.Engine
 
+// xorm engine 초기화
 func init() {
 	// env 라이브러리 호출
 	enverr := godotenv.Load()
@@ -32,8 +34,10 @@ func init() {
 		fmt.Println(err)
 		panic(err)
 	}
+
+	// Connectino pool setting
 	// engine.SetMaxOpenConns()
 	// engine.SetMaxIdleConns()
-	fmt.Println(Engine)
+	// fmt.Println(Engine)
 
 }

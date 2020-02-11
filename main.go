@@ -2,12 +2,14 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"time"
 
 	"github.com/ehdgusdldo/APIServer/docs"
 	"github.com/ehdgusdldo/APIServer/routers"
+	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -18,14 +20,11 @@ func main() {
 	docs.SwaggerInfo.Version = "1.0"
 	docs.SwaggerInfo.Host = "localhost:8082"
 	// docs.SwaggerInfo.BasePath = "/v2"
-
-	// util package import가 먼저 실행되기때문에 env라이브러리 호출부분을 util init 으로 옮겼음. main에서 한번더해도 에러발생은안함
-	// // env 라이브러리 호출
-	// err := godotenv.Load()
-	// if err != nil {
-	// 	log.Fatal("Error loading .env file")
-	// }
-
+	// env 라이브러리 호출
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 	port := os.Getenv("PORT")
 
 	fmt.Println("start API Server LPWA with port :: " + port)
