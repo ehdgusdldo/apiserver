@@ -17,6 +17,7 @@
 
 ## DBORM XORM
 <https://github.com/go-xorm/xorm>
+### xorm insert시 db에 디폴트값이있어도 not null 체크되있을경우 반드시 입력해야함
 
 
 ### gin으로 web서버만들어보기 블로그 
@@ -25,5 +26,13 @@
 
 2.  <https://bourbonkk.tistory.com/60?category=814937>
 
-## 예제처럼 model과 service를 분리할지 한다면 왜그렇게하는지 생각해보자.
-## xorm insert시 db에 디폴트값이있어도 not null 체크되있을경우 반드시 입력해야함
+
+## jwt middleware
+<https://github.com/appleboy/gin-jwt>
+
+## influxdb
+
+1. git <https://github.com/influxdata/influxdb1-client>
+
+2. 예제 <https://medium.com/spankie/getting-started-with-influxdb-with-golang-example-10990c5efee7>
+

@@ -8,6 +8,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// Users uesrs Struct
 type Users struct {
 	UserID    int    `json:"id" example:"4" xorm:"'user_id'"`
 	Pwd       string `json:"pwd" example:"abcd1234" xorm:"'pwd'"`
@@ -18,19 +19,19 @@ type Users struct {
 	Position  string `json:"position" example:"사원" xorm:"'position'"`
 	Admin     int    `json:"admin" example:"1" xorm:"'admin'"`
 	CustID    int    `json:"custid" example:"23" xorm:"'cust_id'"`
-	UserRec   string `json:"userrec" example:"비고" xorm:"'user_rec'"`
+	UserRec   string `json:"rec" example:"비고" xorm:"'user_rec'"`
 	UseYN     string `json:"useyn" example:"Y" xorm:"'use_yn'"`
 	CreatedAt string `json:"createdat" example:"TIMESTAMP" xorm:"created 'created_at'"`
 	UpdatedAt string `json:"updatedat" example:"SAMSUNG" xorm:"updated 'updated_at'"`
 	GfID      int    `json:"gfid" example:"12" xorm:"'gf_id'"`
 }
 
-// 테이블명지정
+// TableName 테이블명 지정
 func (Users) TableName() string {
 	return "users"
 }
 
-// 전체 사용자목록 select후 반환
+// GetAll 전체 사용자목록 select후 반환
 func (u Users) GetAll() (users []Users, err error) {
 
 	err = util.Engine.Find(&users)
@@ -41,7 +42,7 @@ func (u Users) GetAll() (users []Users, err error) {
 	return users, err
 }
 
-// 단일사용자 조회
+// Get 단일사용자 조회
 func (u *Users) Get() (bool, error) {
 
 	has, err := util.Engine.Get(u)
@@ -54,7 +55,7 @@ func (u *Users) Get() (bool, error) {
 	return true, err
 }
 
-// 사용자추가
+// Add 사용자추가
 func (u Users) Add() (id int64, err error) {
 	out, err := json.Marshal(u)
 	fmt.Println(string(out))

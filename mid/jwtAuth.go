@@ -12,13 +12,15 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// User demo
+// User payload 셋팅용 struct
 type User struct {
 	UserName string
 	CID      int
 	UID      int
 	IsAdmin  bool
 }
+
+// 아이디 패스워드 바인딩용 struct
 type login struct {
 	Username string `form:"username" json:"username" binding:"required"`
 	Password string `form:"password" json:"password" binding:"required"`
@@ -36,12 +38,16 @@ func init() {
 	var err error
 	log.Println("init 통과")
 	AuthMiddleware, err = jwt.New(&jwt.GinJWTMiddleware{
-		Realm:       "test zone",
-		Key:         []byte(secretKey),
-		Timeout:     time.Hour * 24 * 7,
-		MaxRefresh:  time.Hour * 24 * 7,
+		Realm: "test zone",
+		//SigningAlgorithm : HS256, 해싱알고리즘 default값 hs256
+		//서명부 시크릿키
+		Key: []byte(secretKey),
+		//토큰 유효기간 설정
+		Timeout:    time.Hour * 24 * 7,
+		MaxRefresh: time.Hour * 24 * 7,
+		// identityKey
 		IdentityKey: identityKey,
-		//PayloadFunc 셋팅
+		//PayloadFunc 셋팅 암호화되지않음
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(*User); ok {
 				return jwt.MapClaims{
@@ -53,6 +59,7 @@ func init() {
 			}
 			return jwt.MapClaims{}
 		},
+		//
 		IdentityHandler: func(c *gin.Context) interface{} {
 			claims := jwt.ExtractClaims(c)
 			return &User{
@@ -96,6 +103,7 @@ func init() {
 			log.Println("아이디 혹은 비밀번호오류")
 			return nil, jwt.ErrFailedAuthentication
 		},
+		//true false로 admin권한여부정할수있는듯? 일단 true리턴
 		Authorizator: func(data interface{}, c *gin.Context) bool {
 			// if v, ok := data.(*User); ok && v.IsAdmin == true {
 			// 	return true
@@ -118,7 +126,7 @@ func init() {
 		// - "query:<name>"
 		// - "cookie:<name>"
 		// - "param:<name>"
-		TokenLookup: "header: Authorization, query: token, cookie: jwt",
+		TokenLookup: "header: Authorization", //, query: token, cookie: jwt
 		// TokenLookup: "query:token",
 		// TokenLookup: "cookie:token",
 

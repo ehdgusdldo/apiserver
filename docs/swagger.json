@@ -26,12 +26,6 @@
                                 "$ref": "#/definitions/models.Custom"
                             }
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/models.FailedMessage"
-                        }
                     }
                 }
             },
@@ -126,12 +120,6 @@
                         "schema": {
                             "$ref": "#/definitions/models.Message"
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/models.FailedMessage"
-                        }
                     }
                 }
             }
@@ -164,12 +152,6 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/models.Custom"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/models.FailedMessage"
                         }
                     }
                 }
@@ -204,10 +186,15 @@
                     },
                     {
                         "type": "integer",
-                        "description": "조회할데이터갯수",
+                        "description": "limit",
                         "name": "limit",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -215,12 +202,6 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/controller.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/models.FailedMessage"
                         }
                     }
                 }
@@ -460,10 +441,6 @@
                     "type": "string",
                     "example": "2020-01-29 13:10:39"
                 },
-                "custrec": {
-                    "type": "string",
-                    "example": "--"
-                },
                 "dtladr": {
                     "type": "string",
                     "example": "심당빌딩 3층 302호"
@@ -487,6 +464,10 @@
                 "postno": {
                     "type": "string",
                     "example": "10414"
+                },
+                "rec": {
+                    "type": "string",
+                    "example": "비고"
                 },
                 "reptnm": {
                     "type": "string",
@@ -574,13 +555,13 @@
                     "type": "string",
                     "example": "abcd1234"
                 },
+                "rec": {
+                    "type": "string",
+                    "example": "비고"
+                },
                 "updatedat": {
                     "type": "string",
                     "example": "SAMSUNG"
-                },
-                "userrec": {
-                    "type": "string",
-                    "example": "비고"
                 },
                 "useyn": {
                     "type": "string",

@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/ehdgusdldo/APIServer/util"
@@ -29,17 +30,26 @@ type Response struct {
 // @Produce  json
 // @Param id query string true "장치아이디"
 // @Param tag query string true "태그명"
-// @Param limit query int true "조회할데이터갯수"
+// @Param limit query int false "limit"
+// @Param offset query int false "offset"
 // @Success 200 {object} Response
-// @Failure 500 {object} models.FailedMessage
 func Equip(c *gin.Context) {
 	// query string parameter bind
 	id := c.Query("id")
 	tag := c.Query("tag")
 	limit := c.Query("limit")
-
+	// limit이 파라미터로 안넘어올시 default값설정
+	if limit == "" {
+		limit = "10"
+	}
+	offset := c.Query("offset")
+	// offset이 파라미터로 안넘어올시 default값설정
+	if offset == "" {
+		offset = "0"
+	}
+	log.Println(offset)
 	// res, err := util.QueryDB("select * from iotdata5 where i = 'TD2BDhvjKEaZo37c4DLAq6'  and k = 'lx2' order by time desc limit 10;")
-	res, err := util.QueryDB("select * from iotdata5 where i = '" + id + "' and k = '" + tag + "' order by time desc limit " + limit + " ;")
+	res, err := util.QueryDB("select * from iotdata5 where i = '" + id + "' and k = '" + tag + "' order by time desc limit " + limit + " offset " + offset + " ;")
 
 	// queryDB err처리
 	if err != nil {
@@ -56,16 +66,14 @@ func Equip(c *gin.Context) {
 		})
 		return
 	}
-	// res[0].Series[0].Values  Values는 [][]interface{} 로 모든측정값이 들어가있음
+	// fmt.Println(res[0].Series[0].Columns)
+	// fmt.Println(res[0].Series[0].Name)
+	// fmt.Println(res[0].Series[0].Partial)
+	// fmt.Println(res[0].Series[0].Tags)
+
+	// res[0].Series[0].Values  Values는 [][]interface{} 로 모든데이터가 들어가있음
 	values := res[0].Series[0].Values
 
-	fmt.Println(res[0].Series[0].Columns)
-	fmt.Println(res[0].Series[0].Name)
-	fmt.Println(res[0].Series[0].Partial)
-	tags := res[0].Series[0].Tags
-	fmt.Println(tags)
-
-	fmt.Println(res[0].Series[0].Values)
 	var value []Influx
 	// Values를 반복돌며 time value를 뽑아내  []value생성
 	// values[i]의 구조예시 -> [[2020-02-10T07:27:09.875302157Z] [TD2BDhvjKEaZo37c4DLAq6] [lx2] [521] [site003]]

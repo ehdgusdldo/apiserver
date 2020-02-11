@@ -8,6 +8,7 @@ import (
 	client "github.com/influxdata/influxdb1-client/v2"
 )
 
+// 추후 dbanme_custID 처럼들어오면 QueryDB에서 파라미터를 하나더받는식으로 수정?
 const (
 	// MyDB specifies name of database
 	MyDB = "mydb"
@@ -60,6 +61,8 @@ func Insert(productMeasurement map[string]interface{}) {
 }
 
 // QueryDB convenience function to query the database
+// http방식으로 쿼리를 날린후 result반환
+// cmd : query문
 func QueryDB(cmd string) (res []client.Result, err error) {
 	q := client.Query{
 		Command:  cmd,

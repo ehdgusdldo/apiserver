@@ -31,9 +31,6 @@ definitions:
       createdat:
         example: "2020-01-29 13:10:39"
         type: string
-      custrec:
-        example: --
-        type: string
       dtladr:
         example: 심당빌딩 3층 302호
         type: string
@@ -51,6 +48,9 @@ definitions:
         type: integer
       postno:
         example: "10414"
+        type: string
+      rec:
+        example: 비고
         type: string
       reptnm:
         example: 고영호
@@ -114,11 +114,11 @@ definitions:
       pwd:
         example: abcd1234
         type: string
+      rec:
+        example: 비고
+        type: string
       updatedat:
         example: SAMSUNG
-        type: string
-      userrec:
-        example: 비고
         type: string
       useyn:
         example: "Y"
@@ -142,10 +142,6 @@ paths:
             items:
               $ref: '#/definitions/models.Custom'
             type: array
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/models.FailedMessage'
       tags:
       - Custom
     post:
@@ -208,10 +204,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Message'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/models.FailedMessage'
       tags:
       - Custom
   /customs/{id}:
@@ -233,10 +225,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Custom'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/models.FailedMessage'
       summary: '{id}고객아이디'
       tags:
       - Custom
@@ -256,10 +244,13 @@ paths:
         name: tag
         required: true
         type: string
-      - description: 조회할데이터갯수
+      - description: limit
         in: query
         name: limit
-        required: true
+        type: integer
+      - description: offset
+        in: query
+        name: offset
         type: integer
       produces:
       - application/json
@@ -268,10 +259,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/controller.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/models.FailedMessage'
       tags:
       - equip
   /users:

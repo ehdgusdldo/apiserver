@@ -19,7 +19,6 @@ import (
 // @Param id path integer true "고객아이디"
 // @Router /customs/{id} [get]
 // @Success 200 {object} models.Custom
-// @Failure 500 {object} models.FailedMessage
 func GetCustom(c *gin.Context) {
 
 	// /custom/{id} path값을 가져와 int로 변환
@@ -50,7 +49,6 @@ func GetCustom(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Success 200 {array} models.Custom
-// @Failure 500 {object} models.FailedMessage
 func GetCustomAll(c *gin.Context) {
 	custom := models.Custom{}
 
@@ -83,7 +81,6 @@ func GetCustomAll(c *gin.Context) {
 // @Param type body integer true "사업자여부 1 or 0"
 // @Param orgid body integer true "그라파나 회사 pk 입력안해야함원랜"
 // @Success 200 {object} models.Message
-// @Failure 500 {object} models.FailedMessage
 func RegisterCustom(c *gin.Context) {
 	var custom models.Custom
 	if err := c.ShouldBindJSON(&custom); err != nil {

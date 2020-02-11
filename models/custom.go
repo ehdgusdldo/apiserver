@@ -6,6 +6,7 @@ import (
 	"github.com/ehdgusdldo/APIServer/util"
 )
 
+// Custom 고객 struct
 type Custom struct {
 	CustID     int    `json:"id" example:"1" xorm:"'cust_id'"`
 	CustEID    string `json:"eid" example:"SAMSUNG" xorm:"'cust_eid'"`
@@ -17,18 +18,19 @@ type Custom struct {
 	CompNo     string `json:"compno" example:"17282718127" xorm:"'comp_no'"`
 	ReptNm     string `json:"reptnm" example:"고영호" xorm:"'rept_nm'"`
 	ApprYN     string `json:"appryn" example:"Y" xorm:"'appr_yn'"`
-	CustRec    string `json:"custrec" example:"--" xorm:"'cust_rec'"`
+	CustRec    string `json:"rec" example:"비고" xorm:"'cust_rec'"`
 	UseYN      string `json:"useyn" example:"Y" xorm:"'use_yn'"`
 	CreatedAt  string `json:"createdat" example:"2020-01-29 13:10:39" xorm:"created 'created_at'"`
 	UpdateedAt string `json:"updatedat" example:"2020-01-29 13:10:39" xorm:"updated 'updated_at'"`
 	OrgID      int    `json:"orgid" example:"2" xorm:"'org_id'"`
 }
 
+// TableName 테이블명 지정
 func (Custom) TableName() string {
 	return "custom"
 }
 
-// 단일get
+// Get select후 c에 갑셋팅
 func (c *Custom) Get() (bool, error) {
 
 	has, err := util.Engine.Get(c)
