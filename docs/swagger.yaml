@@ -1,4 +1,22 @@
 definitions:
+  controller.Influx:
+    properties:
+      t:
+        type: string
+      v:
+        type: string
+    type: object
+  controller.Response:
+    properties:
+      i:
+        type: string
+      k:
+        type: string
+      value:
+        items:
+          $ref: '#/definitions/controller.Influx'
+        type: array
+    type: object
   models.Custom:
     properties:
       appryn:
@@ -222,6 +240,40 @@ paths:
       summary: '{id}고객아이디'
       tags:
       - Custom
+  /equip:
+    get:
+      consumes:
+      - application/json
+      description: influx 조회
+      parameters:
+      - description: 장치아이디
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: 태그명
+        in: query
+        name: tag
+        required: true
+        type: string
+      - description: 조회할데이터갯수
+        in: query
+        name: limit
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.FailedMessage'
+      tags:
+      - equip
   /users:
     get:
       consumes:

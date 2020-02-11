@@ -195,6 +195,57 @@ var doc = `{
                 }
             }
         },
+        "/equip": {
+            "get": {
+                "description": "influx 조회",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "equip"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "장치아이디",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "태그명",
+                        "name": "tag",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "조회할데이터갯수",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.FailedMessage"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "description": "전체사용자 목록조회",
@@ -382,6 +433,34 @@ var doc = `{
         }
     },
     "definitions": {
+        "controller.Influx": {
+            "type": "object",
+            "properties": {
+                "t": {
+                    "type": "string"
+                },
+                "v": {
+                    "type": "string"
+                }
+            }
+        },
+        "controller.Response": {
+            "type": "object",
+            "properties": {
+                "i": {
+                    "type": "string"
+                },
+                "k": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/controller.Influx"
+                    }
+                }
+            }
+        },
         "models.Custom": {
             "type": "object",
             "properties": {
