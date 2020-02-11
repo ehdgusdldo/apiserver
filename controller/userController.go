@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -46,10 +45,11 @@ func GetUserAll(c *gin.Context) {
 // @Success 200 {object} models.Users
 // @Failure 500 {object} models.FailedMessage
 func GetUser(c *gin.Context) {
-
+	// /users/{id} path 값 int로변환후 Users객체에 셋팅
 	id, _ := strconv.Atoi(c.Param("id"))
-
 	user := models.Users{UserID: id}
+
+	// userID로 users테이블 select후 성공시 user 객체의 데이터셋팅 조회안될경우 has false 반환
 	has, err := user.Get()
 	// has 와 err의 처리를 따로 해야하는지
 	if !has || err != nil {
@@ -66,7 +66,7 @@ func GetUser(c *gin.Context) {
 
 }
 
-// 사용자추가
+// RegisterUser 사용자추가
 // @Description 사용자추가
 // @Router /users [post]
 // @Tags User
@@ -85,18 +85,19 @@ func GetUser(c *gin.Context) {
 // @Success 200 {object} models.Message
 // @Failure 500 {object} models.FailedMessage
 func RegisterUser(c *gin.Context) {
+	// parameter user객체의 바인딩
 	var user models.Users
-	println("바인딩전")
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed",
 		})
 		return
 	}
-	println("바인딩완료")
 
-	fmt.Println("-------bindingdata----")
-	fmt.Println(user)
+	// fmt.Println("-------bindingdata----")
+	// fmt.Println(user)
+
+	// 바인딩된데이터로 insert실행
 	userID, err := user.Add()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{

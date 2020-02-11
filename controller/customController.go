@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Welcome godoc
+// GetCustom 고객ID로 단일조회
 // @Summary {id}고객아이디
 // @Description 고객 id로 고객 단일조회
 // @Tags Custom
@@ -22,11 +22,13 @@ import (
 // @Failure 500 {object} models.FailedMessage
 func GetCustom(c *gin.Context) {
 
+	// /custom/{id} path값을 가져와 int로 변환
 	id, _ := strconv.Atoi(c.Param("id"))
 
 	custom := models.Custom{CustID: id}
+	// id로 DB조회후 custom에 데이터셋팅
 	has, err := custom.Get()
-	// has 와 err의 처리를 따로 해야하는지
+	// has 와 err의 처리를 따로 해야하는지 해당id로 조회안될시 has false반환됨
 	if !has || err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed",
@@ -41,7 +43,7 @@ func GetCustom(c *gin.Context) {
 
 }
 
-// Welcome godoc
+// GetCustomAll 고객목록전체조회
 // @Description 전체고객 목록조회
 // @Router /customs [get]
 // @Tags Custom
@@ -66,7 +68,7 @@ func GetCustomAll(c *gin.Context) {
 
 }
 
-// Welcome godoc
+// RegisterCustom 고객등록
 // @Description 고객등록
 // @Router /customs [post]
 // @Tags Custom
@@ -92,8 +94,9 @@ func RegisterCustom(c *gin.Context) {
 
 	}
 
-	fmt.Println("-------bindingdata----")
-	fmt.Println(custom)
+	// fmt.Println("-------bindingdata----")
+	// fmt.Println(custom)
+
 	affected, err := custom.Add()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
