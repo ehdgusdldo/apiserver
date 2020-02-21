@@ -65,8 +65,9 @@ func Insert(productMeasurement map[string]interface{}) {
 // cmd : query문
 func QueryDB(cmd string) (res []client.Result, err error) {
 	q := client.Query{
-		Command:  cmd,
-		Database: MyDB,
+		Command:   cmd,
+		Database:  MyDB,
+		Precision: "ns",
 	}
 	c, err := client.NewHTTPClient(client.HTTPConfig{
 		Addr: influxurl,

@@ -48,100 +48,6 @@ var doc = `{
                         }
                     }
                 }
-            },
-            "post": {
-                "description": "고객등록",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Custom"
-                ],
-                "parameters": [
-                    {
-                        "description": "기본키 원랜입력안해야함",
-                        "name": "id",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "description": "고객아이디 ex SAMSUNG",
-                        "name": "eid",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "고객명 ex 삼성",
-                        "name": "name",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "우편번호10자이내",
-                        "name": "postno",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "기본주소",
-                        "name": "basadr",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "상세주소",
-                        "name": "dtladr",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "사업자여부 1 or 0",
-                        "name": "type",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "description": "그라파나 회사 pk 입력안해야함원랜",
-                        "name": "orgid",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Message"
-                        }
-                    }
-                }
             }
         },
         "/customs/{id}": {
@@ -179,7 +85,7 @@ var doc = `{
         },
         "/equip": {
             "get": {
-                "description": "influx 조회",
+                "description": "iotdata5 조회 limit offset 을 넣지않으면 최근 10건",
                 "consumes": [
                     "application/json"
                 ],
@@ -199,8 +105,8 @@ var doc = `{
                     },
                     {
                         "type": "string",
-                        "description": "태그명",
-                        "name": "tag",
+                        "description": "측정키",
+                        "name": "key",
                         "in": "query",
                         "required": true
                     },
@@ -221,7 +127,108 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/controller.Response"
+                            "$ref": "#/definitions/controller.EquipResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/event": {
+            "get": {
+                "description": "장치의 최근이벤트 히스토리 조회",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "equip"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "장치아이디",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.ResponseEventData"
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "description": "로그인후 jwt토큰발행",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "login"
+                ],
+                "parameters": [
+                    {
+                        "description": "아이디 및 패스워드",
+                        "name": "username",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/mid.login"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/mid.loginSuccess"
+                        }
+                    }
+                }
+            }
+        },
+        "/site": {
+            "get": {
+                "description": "해당사이트에 속한 장치들의 최근측정데이터",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "equip"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "사이트아이디",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.SiteLastDataResponse"
                         }
                     }
                 }
@@ -247,121 +254,6 @@ var doc = `{
                             "items": {
                                 "$ref": "#/definitions/models.Users"
                             }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/models.FailedMessage"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "사용자추가",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "parameters": [
-                    {
-                        "description": "사용자명",
-                        "name": "name",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "비밀번호",
-                        "name": "pwd",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "연락처",
-                        "name": "phone",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "email",
-                        "name": "email",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "1",
-                        "name": "admin",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "description": "13",
-                        "name": "custID",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "description": "2",
-                        "name": "gfId",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "description": "부서",
-                        "name": "dept",
-                        "in": "body",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "직급",
-                        "name": "position",
-                        "in": "body",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "비고",
-                        "name": "rec",
-                        "in": "body",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Message"
                         }
                     },
                     "500": {
@@ -414,31 +306,163 @@ var doc = `{
         }
     },
     "definitions": {
-        "controller.Influx": {
-            "type": "object",
-            "properties": {
-                "t": {
-                    "type": "string"
-                },
-                "v": {
-                    "type": "string"
-                }
-            }
-        },
-        "controller.Response": {
+        "controller.EquipResponse": {
             "type": "object",
             "properties": {
                 "i": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "KyvrjRACQJGd3Q7Q9udzo4"
                 },
                 "k": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "co2"
                 },
                 "value": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/controller.Influx"
+                        "$ref": "#/definitions/controller.TimeValue"
                     }
+                }
+            }
+        },
+        "controller.EquipSeries": {
+            "type": "object",
+            "properties": {
+                "i": {
+                    "type": "string",
+                    "example": "KyvrjRACQJGd3Q7Q9udzo4"
+                },
+                "k": {
+                    "type": "string",
+                    "example": "co2"
+                },
+                "m": {
+                    "type": "integer",
+                    "example": 302
+                },
+                "t": {
+                    "type": "string",
+                    "example": "2019-02-02"
+                }
+            }
+        },
+        "controller.EventData": {
+            "type": "object",
+            "properties": {
+                "actkey": {
+                    "type": "string",
+                    "example": "acky"
+                },
+                "actval": {
+                    "type": "string",
+                    "example": "20"
+                },
+                "curval": {
+                    "type": "integer",
+                    "example": 812
+                },
+                "etype": {
+                    "type": "string",
+                    "example": "err"
+                },
+                "eventkey": {
+                    "type": "string",
+                    "example": "co2"
+                },
+                "limit": {
+                    "type": "string",
+                    "example": "50"
+                },
+                "model": {
+                    "type": "string",
+                    "example": "14"
+                },
+                "notikey": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "site": {
+                    "type": "string",
+                    "example": "site004"
+                },
+                "t": {
+                    "type": "string",
+                    "example": "2019-02-02"
+                }
+            }
+        },
+        "controller.ResponseEventData": {
+            "type": "object",
+            "properties": {
+                "eventList": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/controller.EventData"
+                    }
+                },
+                "i": {
+                    "type": "string",
+                    "example": "KyvrjRACQJGd3Q7Q9udzo4"
+                }
+            }
+        },
+        "controller.SiteLastDataResponse": {
+            "type": "object",
+            "properties": {
+                "SID": {
+                    "type": "string",
+                    "example": "site004"
+                },
+                "lastData": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/controller.EquipSeries"
+                    }
+                }
+            }
+        },
+        "controller.TimeValue": {
+            "type": "object",
+            "properties": {
+                "m": {
+                    "type": "integer",
+                    "example": 302
+                },
+                "t": {
+                    "type": "string",
+                    "example": "2019-02-02"
+                }
+            }
+        },
+        "mid.login": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "mid.loginSuccess": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "200"
+                },
+                "expire": {
+                    "type": "string",
+                    "example": "2020-02-28T09:15:29+09:00"
+                },
+                "token": {
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJDSUQiOjIsIklzQWRtaW4iOnRydWUsIlVJRCI6NDgsIlVzZXJOYW1lIjoi6rmA7ZiV6re8IiwiZXhwIjoxNTgyODQ4OTI5LCJvcmlnX2lhdCI6MTU4MjI0NDEyOX0.ErN3ajVe7Sj5s6jaJQFGfMMaeP8jietm9uP0feacfxA"
                 }
             }
         },
@@ -516,15 +540,6 @@ var doc = `{
                 "message": {
                     "type": "string",
                     "example": "failed"
-                }
-            }
-        },
-        "models.Message": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "success"
                 }
             }
         },

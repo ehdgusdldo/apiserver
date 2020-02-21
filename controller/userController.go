@@ -66,48 +66,48 @@ func GetUser(c *gin.Context) {
 
 }
 
-// RegisterUser 사용자추가
-// @Description 사용자추가
-// @Router /users [post]
-// @Tags User
-// @Accept  json
-// @Produce  json
-// @Param name body string true "사용자명"
-// @Param pwd body string true "비밀번호"
-// @Param phone body string true "연락처"
-// @Param email body string true "email"
-// @Param admin body integer true "1"
-// @Param custID body integer true "13"
-// @Param gfId body integer true "2"
-// @Param dept body string false "부서"
-// @Param position body string false "직급"
-// @Param rec body string false "비고"
-// @Success 200 {object} models.Message
-// @Failure 500 {object} models.FailedMessage
-func RegisterUser(c *gin.Context) {
-	// parameter user객체의 바인딩
-	var user models.Users
-	if err := c.ShouldBindJSON(&user); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed",
-		})
-		return
-	}
+// // RegisterUser 사용자추가
+// // @Description 사용자추가
+// // @Router /users [post]
+// // @Tags User
+// // @Accept  json
+// // @Produce  json
+// // @Param name body string true "사용자명"
+// // @Param pwd body string true "비밀번호"
+// // @Param phone body string true "연락처"
+// // @Param email body string true "email"
+// // @Param admin body integer true "1"
+// // @Param custID body integer true "13"
+// // @Param gfId body integer true "2"
+// // @Param dept body string false "부서"
+// // @Param position body string false "직급"
+// // @Param rec body string false "비고"
+// // @Success 200 {object} models.Message
+// // @Failure 500 {object} models.FailedMessage
+// func RegisterUser(c *gin.Context) {
+// 	// parameter user객체의 바인딩
+// 	var user models.Users
+// 	if err := c.ShouldBindJSON(&user); err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{
+// 			"message": "failed",
+// 		})
+// 		return
+// 	}
 
-	// fmt.Println("-------bindingdata----")
-	// fmt.Println(user)
+// 	// fmt.Println("-------bindingdata----")
+// 	// fmt.Println(user)
 
-	// 바인딩된데이터로 insert실행
-	userID, err := user.Add()
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed",
-			"error":   err,
-		})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{
-		"message": "success",
-		"ID":      userID,
-	})
-}
+// 	// 바인딩된데이터로 insert실행
+// 	userID, err := user.Add()
+// 	if err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{
+// 			"message": "failed",
+// 			"error":   err,
+// 		})
+// 		return
+// 	}
+// 	c.JSON(http.StatusOK, gin.H{
+// 		"message": "success",
+// 		"ID":      userID,
+// 	})
+// }

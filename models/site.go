@@ -21,3 +21,16 @@ type Site struct {
 func (Site) TableName() string {
 	return "site"
 }
+
+/* // Get 사이트 단일조회
+func (s *Site) Get() (bool, error) {
+
+	has, err := util.Engine.Get(s)
+
+	if !has || err != nil {
+		fmt.Println(err)
+		return false, err
+	}
+
+	return true, err
+} */

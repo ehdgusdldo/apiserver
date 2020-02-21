@@ -1,21 +1,115 @@
 definitions:
-  controller.Influx:
-    properties:
-      t:
-        type: string
-      v:
-        type: string
-    type: object
-  controller.Response:
+  controller.EquipResponse:
     properties:
       i:
+        example: KyvrjRACQJGd3Q7Q9udzo4
         type: string
       k:
+        example: co2
         type: string
       value:
         items:
-          $ref: '#/definitions/controller.Influx'
+          $ref: '#/definitions/controller.TimeValue'
         type: array
+    type: object
+  controller.EquipSeries:
+    properties:
+      i:
+        example: KyvrjRACQJGd3Q7Q9udzo4
+        type: string
+      k:
+        example: co2
+        type: string
+      m:
+        example: 302
+        type: integer
+      t:
+        example: "2019-02-02"
+        type: string
+    type: object
+  controller.EventData:
+    properties:
+      actkey:
+        example: acky
+        type: string
+      actval:
+        example: "20"
+        type: string
+      curval:
+        example: 812
+        type: integer
+      etype:
+        example: err
+        type: string
+      eventkey:
+        example: co2
+        type: string
+      limit:
+        example: "50"
+        type: string
+      model:
+        example: "14"
+        type: string
+      notikey:
+        example: "1"
+        type: string
+      site:
+        example: site004
+        type: string
+      t:
+        example: "2019-02-02"
+        type: string
+    type: object
+  controller.ResponseEventData:
+    properties:
+      eventList:
+        items:
+          $ref: '#/definitions/controller.EventData'
+        type: array
+      i:
+        example: KyvrjRACQJGd3Q7Q9udzo4
+        type: string
+    type: object
+  controller.SiteLastDataResponse:
+    properties:
+      SID:
+        example: site004
+        type: string
+      lastData:
+        items:
+          $ref: '#/definitions/controller.EquipSeries'
+        type: array
+    type: object
+  controller.TimeValue:
+    properties:
+      m:
+        example: 302
+        type: integer
+      t:
+        example: "2019-02-02"
+        type: string
+    type: object
+  mid.login:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  mid.loginSuccess:
+    properties:
+      code:
+        example: "200"
+        type: string
+      expire:
+        example: "2020-02-28T09:15:29+09:00"
+        type: string
+      token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJDSUQiOjIsIklzQWRtaW4iOnRydWUsIlVJRCI6NDgsIlVzZXJOYW1lIjoi6rmA7ZiV6re8IiwiZXhwIjoxNTgyODQ4OTI5LCJvcmlnX2lhdCI6MTU4MjI0NDEyOX0.ErN3ajVe7Sj5s6jaJQFGfMMaeP8jietm9uP0feacfxA
+        type: string
     type: object
   models.Custom:
     properties:
@@ -71,12 +165,6 @@ definitions:
         type: object
       message:
         example: failed
-        type: string
-    type: object
-  models.Message:
-    properties:
-      message:
-        example: success
         type: string
     type: object
   models.Users:
@@ -144,68 +232,6 @@ paths:
             type: array
       tags:
       - Custom
-    post:
-      consumes:
-      - application/json
-      description: 고객등록
-      parameters:
-      - description: 기본키 원랜입력안해야함
-        in: body
-        name: id
-        required: true
-        schema:
-          type: integer
-      - description: 고객아이디 ex SAMSUNG
-        in: body
-        name: eid
-        required: true
-        schema:
-          type: string
-      - description: 고객명 ex 삼성
-        in: body
-        name: name
-        required: true
-        schema:
-          type: string
-      - description: 우편번호10자이내
-        in: body
-        name: postno
-        required: true
-        schema:
-          type: string
-      - description: 기본주소
-        in: body
-        name: basadr
-        required: true
-        schema:
-          type: string
-      - description: 상세주소
-        in: body
-        name: dtladr
-        required: true
-        schema:
-          type: string
-      - description: 사업자여부 1 or 0
-        in: body
-        name: type
-        required: true
-        schema:
-          type: integer
-      - description: 그라파나 회사 pk 입력안해야함원랜
-        in: body
-        name: orgid
-        required: true
-        schema:
-          type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Message'
-      tags:
-      - Custom
   /customs/{id}:
     get:
       consumes:
@@ -232,16 +258,16 @@ paths:
     get:
       consumes:
       - application/json
-      description: influx 조회
+      description: iotdata5 조회 limit offset 을 넣지않으면 최근 10건
       parameters:
       - description: 장치아이디
         in: query
         name: id
         required: true
         type: string
-      - description: 태그명
+      - description: 측정키
         in: query
-        name: tag
+        name: key
         required: true
         type: string
       - description: limit
@@ -258,7 +284,72 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/controller.Response'
+            $ref: '#/definitions/controller.EquipResponse'
+      tags:
+      - equip
+  /event:
+    get:
+      consumes:
+      - application/json
+      description: 장치의 최근이벤트 히스토리 조회
+      parameters:
+      - description: 장치아이디
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.ResponseEventData'
+      tags:
+      - equip
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: 로그인후 jwt토큰발행
+      parameters:
+      - description: 아이디 및 패스워드
+        in: body
+        name: username
+        required: true
+        schema:
+          $ref: '#/definitions/mid.login'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/mid.loginSuccess'
+      tags:
+      - login
+  /site:
+    get:
+      consumes:
+      - application/json
+      description: 해당사이트에 속한 장치들의 최근측정데이터
+      parameters:
+      - description: 사이트아이디
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.SiteLastDataResponse'
       tags:
       - equip
   /users:
@@ -275,81 +366,6 @@ paths:
             items:
               $ref: '#/definitions/models.Users'
             type: array
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/models.FailedMessage'
-      tags:
-      - User
-    post:
-      consumes:
-      - application/json
-      description: 사용자추가
-      parameters:
-      - description: 사용자명
-        in: body
-        name: name
-        required: true
-        schema:
-          type: string
-      - description: 비밀번호
-        in: body
-        name: pwd
-        required: true
-        schema:
-          type: string
-      - description: 연락처
-        in: body
-        name: phone
-        required: true
-        schema:
-          type: string
-      - description: email
-        in: body
-        name: email
-        required: true
-        schema:
-          type: string
-      - description: "1"
-        in: body
-        name: admin
-        required: true
-        schema:
-          type: integer
-      - description: "13"
-        in: body
-        name: custID
-        required: true
-        schema:
-          type: integer
-      - description: "2"
-        in: body
-        name: gfId
-        required: true
-        schema:
-          type: integer
-      - description: 부서
-        in: body
-        name: dept
-        schema:
-          type: string
-      - description: 직급
-        in: body
-        name: position
-        schema:
-          type: string
-      - description: 비고
-        in: body
-        name: rec
-        schema:
-          type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Message'
         "500":
           description: Internal Server Error
           schema:

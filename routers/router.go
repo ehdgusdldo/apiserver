@@ -42,13 +42,13 @@ func InitRouter() *gin.Engine {
 	{
 		c.GET("", controller.GetCustomAll)
 		c.GET("/:id", controller.GetCustom)
-		c.POST("", controller.RegisterCustom)
+		// c.POST("", controller.RegisterCustom)
 	}
 	// users
 	u := r.Group("/users")
 	{
 		u.GET("", controller.GetUserAll)
-		u.POST("", controller.RegisterUser)
+		// u.POST("", controller.RegisterUser)
 		u.GET("/:id", controller.GetUser)
 
 	}
@@ -68,6 +68,8 @@ func InitRouter() *gin.Engine {
 
 	// influx select
 	r.GET("/equip", controller.Equip)
+	r.GET("/site", controller.Site)
+	r.GET("/event", controller.Event)
 
 	return r
 }

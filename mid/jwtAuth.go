@@ -26,6 +26,13 @@ type login struct {
 	Password string `form:"password" json:"password" binding:"required"`
 }
 
+// 스웨거 페이지보여주기위한 struct
+type loginSuccess struct {
+	code   string `example:"200"`
+	expire string `example:"2020-02-28T09:15:29+09:00"`
+	token  string `example:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJDSUQiOjIsIklzQWRtaW4iOnRydWUsIlVJRCI6NDgsIlVzZXJOYW1lIjoi6rmA7ZiV6re8IiwiZXhwIjoxNTgyODQ4OTI5LCJvcmlnX2lhdCI6MTU4MjI0NDEyOX0.ErN3ajVe7Sj5s6jaJQFGfMMaeP8jietm9uP0feacfxA"`
+}
+
 var identityKey = "id"
 
 // jwt secret key
@@ -70,39 +77,7 @@ func init() {
 			}
 		},
 		// 로그인로직
-		Authenticator: func(c *gin.Context) (interface{}, error) {
-			var loginVals login
-			// ID와 password 바인딩
-			if err := c.ShouldBind(&loginVals); err != nil {
-				return "", jwt.ErrMissingLoginValues
-			}
-			userID := loginVals.Username
-			password := loginVals.Password
-			// user객체에 email 값셋팅후 DBselect
-			user := models.Users{Email: userID}
-			util.Engine.Get(&user)
-			log.Println(user)
-			// select한 user객체의 admin값에따라 isadmin true false 설정
-			var isAdmin bool
-			if user.Admin == 0 {
-				isAdmin = false
-			} else {
-				isAdmin = true
-			}
-
-			//  bcrypt로 암호화된 패스워드와 사용자가입력한 패스워드가 일치하는지 확인후 일치하면 user객체 리턴
-			if pwdErr := bcrypt.CompareHashAndPassword([]byte(user.Pwd), []byte(password)); pwdErr == nil {
-				log.Println("로그인성공")
-				return &User{
-					UserName: user.Name,
-					CID:      user.CustID,
-					UID:      user.UserID,
-					IsAdmin:  isAdmin,
-				}, nil
-			}
-			log.Println("아이디 혹은 비밀번호오류")
-			return nil, jwt.ErrFailedAuthentication
-		},
+		Authenticator: loginfunc,
 		//true false로 admin권한여부정할수있는듯? 일단 true리턴
 		Authorizator: func(data interface{}, c *gin.Context) bool {
 			// if v, ok := data.(*User); ok && v.IsAdmin == true {
@@ -142,4 +117,46 @@ func init() {
 	}
 	log.Println("init 끝")
 	log.Println(AuthMiddleware)
+}
+
+// 로그인핸들러 ..
+// @Description 로그인후 jwt토큰발행
+// @Router /login [post]
+// @Tags login
+// @Accept  json
+// @Produce  json
+// @Param username body login true "아이디 및 패스워드"
+// @Success 200 {object} loginSuccess
+func loginfunc(c *gin.Context) (interface{}, error) {
+	var loginVals login
+	// ID와 password 바인딩
+	if err := c.ShouldBind(&loginVals); err != nil {
+		return "", jwt.ErrMissingLoginValues
+	}
+	userID := loginVals.Username
+	password := loginVals.Password
+	// user객체에 email 값셋팅후 DBselect
+	user := models.Users{Email: userID}
+	util.Engine.Get(&user)
+	log.Println(user)
+	// select한 user객체의 admin값에따라 isadmin true false 설정
+	var isAdmin bool
+	if user.Admin == 0 {
+		isAdmin = false
+	} else {
+		isAdmin = true
+	}
+
+	//  bcrypt로 암호화된 패스워드와 사용자가입력한 패스워드가 일치하는지 확인후 일치하면 user객체 리턴
+	if pwdErr := bcrypt.CompareHashAndPassword([]byte(user.Pwd), []byte(password)); pwdErr == nil {
+		log.Println("로그인성공")
+		return &User{
+			UserName: user.Name,
+			CID:      user.CustID,
+			UID:      user.UserID,
+			IsAdmin:  isAdmin,
+		}, nil
+	}
+	log.Println("아이디 혹은 비밀번호오류")
+	return nil, jwt.ErrFailedAuthentication
 }
