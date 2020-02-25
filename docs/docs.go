@@ -25,6 +25,31 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/command": {
+            "post": {
+                "description": "redis publish",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "redis"
+                ],
+                "parameters": [
+                    {
+                        "description": "command",
+                        "name": "command",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controller.Command"
+                        }
+                    }
+                ]
+            }
+        },
         "/customs": {
             "get": {
                 "description": "전체고객 목록조회",
@@ -185,7 +210,7 @@ var doc = `{
                 "parameters": [
                     {
                         "description": "아이디 및 패스워드",
-                        "name": "username",
+                        "name": "user",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -306,6 +331,28 @@ var doc = `{
         }
     },
     "definitions": {
+        "controller.Command": {
+            "type": "object",
+            "required": [
+                "actionkey",
+                "actionval",
+                "dev-id"
+            ],
+            "properties": {
+                "actionkey": {
+                    "type": "string",
+                    "example": "acky"
+                },
+                "actionval": {
+                    "type": "string",
+                    "example": "200"
+                },
+                "dev-id": {
+                    "type": "string",
+                    "example": "Wxldi39DJecl2dUdlJWL34"
+                }
+            }
+        },
         "controller.EquipResponse": {
             "type": "object",
             "properties": {

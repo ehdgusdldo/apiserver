@@ -1,4 +1,20 @@
 definitions:
+  controller.Command:
+    properties:
+      actionkey:
+        example: acky
+        type: string
+      actionval:
+        example: "200"
+        type: string
+      dev-id:
+        example: Wxldi39DJecl2dUdlJWL34
+        type: string
+    required:
+    - actionkey
+    - actionval
+    - dev-id
+    type: object
   controller.EquipResponse:
     properties:
       i:
@@ -216,6 +232,22 @@ info:
   contact: {}
   license: {}
 paths:
+  /command:
+    post:
+      consumes:
+      - application/json
+      description: redis publish
+      parameters:
+      - description: command
+        in: body
+        name: command
+        required: true
+        schema:
+          $ref: '#/definitions/controller.Command'
+      produces:
+      - application/json
+      tags:
+      - redis
   /customs:
     get:
       consumes:
@@ -319,7 +351,7 @@ paths:
       parameters:
       - description: 아이디 및 패스워드
         in: body
-        name: username
+        name: user
         required: true
         schema:
           $ref: '#/definitions/mid.login'

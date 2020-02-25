@@ -53,23 +53,26 @@ func InitRouter() *gin.Engine {
 
 	}
 
-	auth := r.Group("/auth")
-	// jwt 미들웨어 적용 전체라우터에할수도있고 그룹별로 따로도 가능
 	// 토큰발행 로그인
 	r.POST("/login", mid.AuthMiddleware.LoginHandler)
 	// refresh token 발행
 	r.GET("/refresh_token", mid.AuthMiddleware.RefreshHandler)
-
-	auth.Use(mid.AuthMiddleware.MiddlewareFunc())
-	{
-		//test
-		auth.GET("/hello", controller.HelloHandler)
-	}
 
 	// influx select
 	r.GET("/equip", controller.Equip)
 	r.GET("/site", controller.Site)
 	r.GET("/event", controller.Event)
 
+	// redis
+	r.GET("/redis", controller.HelloRedis)
+	r.POST("/command", controller.PubCommand)
+
+	auth := r.Group("/auth")
+	// jwt미들웨어 적용
+	auth.Use(mid.AuthMiddleware.MiddlewareFunc())
+	{
+		//test
+		auth.GET("/hello", controller.HelloHandler)
+	}
 	return r
 }

@@ -125,7 +125,7 @@ func init() {
 // @Tags login
 // @Accept  json
 // @Produce  json
-// @Param username body login true "아이디 및 패스워드"
+// @Param user body login true "아이디 및 패스워드"
 // @Success 200 {object} loginSuccess
 func loginfunc(c *gin.Context) (interface{}, error) {
 	var loginVals login
