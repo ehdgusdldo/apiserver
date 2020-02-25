@@ -33,7 +33,7 @@ func Insert(productMeasurement map[string]interface{}) {
 	// Create a new point batch
 	bp, err := client.NewBatchPoints(client.BatchPointsConfig{
 		Database:  MyDB,
-		Precision: "s",
+		Precision: "ms",
 	})
 	if err != nil {
 		log.Fatal(err)
@@ -67,7 +67,7 @@ func QueryDB(cmd string) (res []client.Result, err error) {
 	q := client.Query{
 		Command:   cmd,
 		Database:  MyDB,
-		Precision: "ns",
+		Precision: "ms",
 	}
 	c, err := client.NewHTTPClient(client.HTTPConfig{
 		Addr: influxurl,
