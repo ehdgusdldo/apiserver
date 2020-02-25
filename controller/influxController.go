@@ -108,7 +108,7 @@ func Equip(c *gin.Context) {
 	// res[0].Series[0].Values  Values는 [][]interface{} 로 모든데이터가 들어가있음
 	values := res[0].Series[0].Values
 	log.Println(values)
-	var value []TimeValue
+	var timeValue []TimeValue
 	// Values를 순회하며 응답할 데이터형태로 조립
 	// iotdata5 의 values[i]의 구조예시 -> [[2020-02-10T07:27:09.875302157Z] [TD2BDhvjKEaZo37c4DLAq6] [lx2] [521] [site003]]
 	for i := 0; i < len(values); i++ {
@@ -126,13 +126,13 @@ func Equip(c *gin.Context) {
 		}
 		influx := TimeValue{time, v}
 
-		value = append(value, influx)
+		timeValue = append(timeValue, influx)
 	}
 	// 장치id와 tag값을 0번째데이터에서 가져와 응답 k, i에 셋팅lets incrytp
 	k := fmt.Sprint(values[0][2])
 	i := fmt.Sprint(values[0][1])
 	var response EquipResponse
-	response = EquipResponse{i, k, value}
+	response = EquipResponse{i, k, timeValue}
 
 	c.JSON(http.StatusOK, response)
 

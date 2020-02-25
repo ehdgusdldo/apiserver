@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -17,11 +18,17 @@ type Command struct {
 	ActionVal int    `form:"actionval" json:"actionval" binding:"required" example:"200"`
 }
 
+// CommandResponse swagger 응답표시용 struct
+type CommandResponse struct {
+	Message        string `example:"success"`
+	SubscribeCount int64  `example:"5"`
+}
+
 var rdb *redis.Client
 
 func init() {
 	rdb = redis.NewClient(&redis.Options{
-		Addr:     "192.168.0.102:16379",
+		Addr:     os.Getenv("redis-addr"),
 		Password: "", // no password set
 		DB:       0,  // use default DB
 		// DialTimeout:  10 * time.Second,
@@ -37,28 +44,42 @@ func HelloRedis(c *gin.Context) {
 	pong, err := rdb.Ping().Result()
 	fmt.Println(pong, err)
 	// Output: PONG <nil>
+
 	// 스트림테스트
-	rdb.XAdd(&redis.XAddArgs{
-		Stream: "stream1",
-		ID:     "2-0",
-		Values: map[string]interface{}{"doc": "deux"},
-	}).Result()
+	// values := map[string]interface{}{
+	// 	"doc": "deux",
+	// 	"hi":  "hello",
+	// }
+	// log.Println(values)
+	// err = rdb.XAdd(&redis.XAddArgs{
+	// 	Stream: "stream2",
+	// 	ID:     "2-1",
+	// 	Values: values,
+	// }).Err()
+
+	// if err != nil {
+	// 	log.Println(err)
+	// }
 }
 
-// PubCommand command  ..
+// PubCommand request로 들어온 장치아이디, actionkey, actionVal 를 redis에 publish
 // @Description redis publish
 // @Router /command [post]
 // @Tags redis
 // @Accept  json
 // @Produce  json
 // @Param command body Command true "command"
+// @success 200 {object} CommandResponse
 func PubCommand(c *gin.Context) {
 	var command Command
+	// request body 바인딩
 	c.ShouldBindJSON(&command)
 
-	log.Println(command)
+	// redis publish
 	count, err := rdb.Publish("usercommand", command.DevID+","+command.ActionKey+","+strconv.Itoa(command.ActionVal)).Result()
+
 	log.Println("subscribe count :" + strconv.FormatInt(count, 10))
+
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed",
@@ -66,6 +87,7 @@ func PubCommand(c *gin.Context) {
 		})
 	}
 
+	// 성공메시지와 subscribe 된 count 응답
 	c.JSON(http.StatusOK, gin.H{
 		"message":        "success",
 		"SubscribeCount": count,

@@ -47,7 +47,15 @@ var doc = `{
                             "$ref": "#/definitions/controller.Command"
                         }
                     }
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller.CommandResponse"
+                        }
+                    }
+                }
             }
         },
         "/customs": {
@@ -344,12 +352,25 @@ var doc = `{
                     "example": "acky"
                 },
                 "actionval": {
-                    "type": "string",
-                    "example": "200"
+                    "type": "integer",
+                    "example": 200
                 },
                 "dev-id": {
                     "type": "string",
                     "example": "Wxldi39DJecl2dUdlJWL34"
+                }
+            }
+        },
+        "controller.CommandResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "success"
+                },
+                "subscribeCount": {
+                    "type": "integer",
+                    "example": 5
                 }
             }
         },

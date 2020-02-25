@@ -5,8 +5,8 @@ definitions:
         example: acky
         type: string
       actionval:
-        example: "200"
-        type: string
+        example: 200
+        type: integer
       dev-id:
         example: Wxldi39DJecl2dUdlJWL34
         type: string
@@ -14,6 +14,15 @@ definitions:
     - actionkey
     - actionval
     - dev-id
+    type: object
+  controller.CommandResponse:
+    properties:
+      message:
+        example: success
+        type: string
+      subscribeCount:
+        example: 5
+        type: integer
     type: object
   controller.EquipResponse:
     properties:
@@ -246,6 +255,11 @@ paths:
           $ref: '#/definitions/controller.Command'
       produces:
       - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.CommandResponse'
       tags:
       - redis
   /customs:
