@@ -93,9 +93,9 @@ func Equip(c *gin.Context) {
 		})
 		return
 	}
-	// 조회된 데이터가 없을시 500 메세지 반환
+	// 조회된 데이터가 없을시 OK로 nodata 메시지 반환
 	if len(res[0].Series) == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{
+		c.JSON(http.StatusOK, gin.H{
 			"message": "no data check parameter",
 		})
 		return
@@ -169,7 +169,12 @@ func Event(c *gin.Context) {
 		key : 													  Time          actkey   actval  curval  etype  eventkey            id           limit  model   notikey    site
 		eventdata measurement의경우 Values[i]의 구조 [2020-02-21T01:58:44.537Z    acky      20     629      ov      hm1   KyvrjRACQJGd3Q7Q9udzo4   50      30       1      site006]
 	*/
-	log.Println(res[0].Series[0].Values[4])
+	if len(res[0].Series) == 0 {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "no eventdata check parameter",
+		})
+		return
+	}
 	// values 를순회하며 응답할 데이터형태로 조립
 	var eventList []EventData
 	values := res[0].Series[0].Values
@@ -222,6 +227,14 @@ func Site(c *gin.Context) {
 		})
 		return
 	}
+	// 조회된 데이터가 없을시 OK로 nodata 메시지 반환
+	if len(res[0].Series) == 0 {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "no data check parameter",
+		})
+		return
+	}
+
 	// 데이터리스트
 	var list []EquipSeries
 
@@ -230,6 +243,7 @@ func Site(c *gin.Context) {
 			series[0] ex)  {iotdata5 map[i:zo7ic7jJZmaxGzBjNjASRk k:tm2] [time m s] [[2020-02-21T04:13:50.78Z 286 site004]] false}
 
 	*/
+
 	// 시리즈를 순회하며 응답할형태의 데이터로 조립
 	series := res[0].Series
 	log.Println(res[0].Series[0])
