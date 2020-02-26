@@ -12,13 +12,16 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 	//swagger
 	// programatically set swagger info
 	docs.SwaggerInfo.Title = "LPWA API"
 	docs.SwaggerInfo.Description = "LPWA API SAMPLE SWAGGER"
 	docs.SwaggerInfo.Version = "1.0"
-	docs.SwaggerInfo.Host = "192.168.0.101:8082"
+	docs.SwaggerInfo.Host = "localhost:8082"
 	// docs.SwaggerInfo.BasePath = "/v2"
 	// env 라이브러리 호출
 	err := godotenv.Load()

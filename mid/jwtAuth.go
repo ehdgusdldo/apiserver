@@ -80,12 +80,11 @@ func init() {
 		Authenticator: loginfunc,
 		//true false로 admin권한여부정할수있는듯? 일단 true리턴
 		Authorizator: func(data interface{}, c *gin.Context) bool {
-			// if v, ok := data.(*User); ok && v.IsAdmin == true {
-			// 	return true
-			// }
+			if v, ok := data.(*User); ok && v.IsAdmin == true {
+				return true
+			}
 
-			// return false
-			return true
+			return false
 		},
 		Unauthorized: func(c *gin.Context, code int, message string) {
 			c.JSON(code, gin.H{
@@ -141,12 +140,14 @@ func loginfunc(c *gin.Context) (interface{}, error) {
 	log.Println(user)
 	// select한 user객체의 admin값에따라 isadmin true false 설정
 	var isAdmin bool
-	if user.Admin == 0 {
+	switch user.Admin {
+	case 0:
 		isAdmin = false
-	} else {
+	case 1:
+		isAdmin = true
+	case 2:
 		isAdmin = true
 	}
-
 	//  bcrypt로 암호화된 패스워드와 사용자가입력한 패스워드가 일치하는지 확인후 일치하면 user객체 리턴
 	if pwdErr := bcrypt.CompareHashAndPassword([]byte(user.Pwd), []byte(password)); pwdErr == nil {
 		log.Println("로그인성공")

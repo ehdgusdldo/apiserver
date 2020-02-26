@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Welcome godoc
+// GetUserAll ..
 // @Description 전체사용자 목록조회
 // @Router /users [get]
 // @Tags User
@@ -33,7 +33,7 @@ func GetUserAll(c *gin.Context) {
 
 }
 
-// 단일 고객 조회
+// GetUser 단일 고객 조회
 // @Summary {id} 사용자아이디
 // @Description 사용자 id로 사용자 단일조회
 // @Tags User

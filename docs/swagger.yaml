@@ -184,12 +184,150 @@ definitions:
         example: "Y"
         type: string
     type: object
+  models.Device:
+    properties:
+      authid:
+        example: '?'
+        type: string
+      authkey:
+        example: ??
+        type: string
+      createdat:
+        example: "2020-01-29 13:10:39"
+        type: string
+      custid:
+        example: 4
+        type: integer
+      equpid:
+        example: 1
+        type: integer
+      firmware:
+        example: firmware version
+        type: string
+      id:
+        example: TD2BDhvjKEaZo37c4DLAq6
+        type: string
+      modelid:
+        example: 4
+        type: integer
+      name:
+        example: device-37
+        type: string
+      prtctype:
+        example: prtctype
+        type: string
+      rec:
+        example: 비고
+        type: string
+      serialno:
+        example: 102312-12312
+        type: string
+      siteid:
+        example: 1
+        type: integer
+      status:
+        example: "1"
+        type: string
+      tag:
+        example: tag
+        type: string
+      type:
+        example: ??
+        type: string
+      updatedat:
+        example: "2020-01-29 13:10:39"
+        type: string
+      useyn:
+        example: "Y"
+        type: string
+    type: object
   models.FailedMessage:
     properties:
       err:
         type: object
       message:
         example: failed
+        type: string
+    type: object
+  models.Model:
+    properties:
+      createdat:
+        example: "2020-01-29 13:10:39"
+        type: string
+      custid:
+        example: 4
+        type: integer
+      firmware:
+        example: firmware version
+        type: string
+      id:
+        example: 4
+        type: integer
+      name:
+        example: viux-38
+        type: string
+      prtcio:
+        example: "1"
+        type: string
+      prtctype:
+        example: prtctype
+        type: string
+      rec:
+        example: 비고
+        type: string
+      tag:
+        example: tag
+        type: string
+      type:
+        example: ??
+        type: string
+      updatedat:
+        example: "2020-01-29 13:10:39"
+        type: string
+      useyn:
+        example: "Y"
+        type: string
+    type: object
+  models.Site:
+    properties:
+      basadr:
+        example: 서울특별시 강서구 화곡로 132
+        type: string
+      createdat:
+        example: "2020-01-29 13:10:39"
+        type: string
+      custid:
+        example: 1
+        type: integer
+      dtladr:
+        example: 심당빌딩 3층 301호
+        type: string
+      id:
+        example: 1
+        type: integer
+      lat:
+        example: 32°
+        type: string
+      lon:
+        example: 24°
+        type: string
+      name:
+        example: 제주1공장
+        type: string
+      postno:
+        example: "10232"
+        type: string
+      rec:
+        example: 비고
+        type: string
+      type:
+        example: ??
+        type: string
+      updatedat:
+        example: "2020-01-29 13:10:39"
+        type: string
+      useyn:
+        example: "Y"
         type: string
     type: object
   models.Users:
@@ -241,6 +379,127 @@ info:
   contact: {}
   license: {}
 paths:
+  /auth/device:
+    get:
+      consumes:
+      - application/json
+      description: 로그인한 유저 고객사의 모델리스트  Authorization Bearer token 을 넣으세요
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Device'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - device
+  /auth/device/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 모델 단일조회  Authorization Bearer token 을 넣으세요
+      parameters:
+      - description: 장치아이디
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Device'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - device
+  /auth/model:
+    get:
+      consumes:
+      - application/json
+      description: 로그인한 유저 고객사의 모델리스트  Authorization Bearer token 을 넣으세요
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Model'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - model
+  /auth/model/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 모델 단일조회  Authorization Bearer token 을 넣으세요
+      operationId: get-string-by-int
+      parameters:
+      - description: 모델아이디
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Model'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - model
+  /auth/site:
+    get:
+      consumes:
+      - application/json
+      description: 로그인한 유저 고객사의 사이트리스트  Authorization Bearer token 을 넣으세요
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Site'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - site
+  /auth/site/{id}:
+    get:
+      consumes:
+      - application/json
+      operationId: get-string-by-int
+      parameters:
+      - description: 사이트아이디
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Site'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - site
   /command:
     post:
       consumes:
@@ -444,4 +703,9 @@ paths:
       summary: '{id} 사용자아이디'
       tags:
       - User
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

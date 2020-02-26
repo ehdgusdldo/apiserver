@@ -73,6 +73,15 @@ func InitRouter() *gin.Engine {
 	{
 		//test
 		auth.GET("/hello", controller.HelloHandler)
+		//site
+		auth.GET("/site", controller.GetSiteAll)
+		auth.GET("/site/:id", controller.GetSite)
+		// model
+		auth.GET("/model", controller.GetModelAll)
+		auth.GET("/model/:id", controller.GetModel)
+		// device
+		auth.GET("/device", controller.GetDeviceAll)
+		auth.GET("/device/:id", controller.GetDevice)
 	}
 	return r
 }

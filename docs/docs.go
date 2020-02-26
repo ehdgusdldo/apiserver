@@ -25,6 +25,205 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/auth/device": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "로그인한 유저 고객사의 모델리스트  Authorization Bearer token 을 넣으세요",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "device"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Device"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/device/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "모델 단일조회  Authorization Bearer token 을 넣으세요",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "device"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "장치아이디",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Device"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/model": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "로그인한 유저 고객사의 모델리스트  Authorization Bearer token 을 넣으세요",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "model"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Model"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/model/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "모델 단일조회  Authorization Bearer token 을 넣으세요",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "model"
+                ],
+                "operationId": "get-string-by-int",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "모델아이디",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Model"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/site": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "로그인한 유저 고객사의 사이트리스트  Authorization Bearer token 을 넣으세요",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "site"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Site"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/site/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "site"
+                ],
+                "operationId": "get-string-by-int",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "사이트아이디",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Site"
+                        }
+                    }
+                }
+            }
+        },
         "/command": {
             "post": {
                 "description": "redis publish",
@@ -599,6 +798,83 @@ var doc = `{
                 }
             }
         },
+        "models.Device": {
+            "type": "object",
+            "properties": {
+                "authid": {
+                    "type": "string",
+                    "example": "?"
+                },
+                "authkey": {
+                    "type": "string",
+                    "example": "??"
+                },
+                "createdat": {
+                    "type": "string",
+                    "example": "2020-01-29 13:10:39"
+                },
+                "custid": {
+                    "type": "integer",
+                    "example": 4
+                },
+                "equpid": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "firmware": {
+                    "type": "string",
+                    "example": "firmware version"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "TD2BDhvjKEaZo37c4DLAq6"
+                },
+                "modelid": {
+                    "type": "integer",
+                    "example": 4
+                },
+                "name": {
+                    "type": "string",
+                    "example": "device-37"
+                },
+                "prtctype": {
+                    "type": "string",
+                    "example": "prtctype"
+                },
+                "rec": {
+                    "type": "string",
+                    "example": "비고"
+                },
+                "serialno": {
+                    "type": "string",
+                    "example": "102312-12312"
+                },
+                "siteid": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "status": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "tag": {
+                    "type": "string",
+                    "example": "tag"
+                },
+                "type": {
+                    "type": "string",
+                    "example": "??"
+                },
+                "updatedat": {
+                    "type": "string",
+                    "example": "2020-01-29 13:10:39"
+                },
+                "useyn": {
+                    "type": "string",
+                    "example": "Y"
+                }
+            }
+        },
         "models.FailedMessage": {
             "type": "object",
             "properties": {
@@ -608,6 +884,116 @@ var doc = `{
                 "message": {
                     "type": "string",
                     "example": "failed"
+                }
+            }
+        },
+        "models.Model": {
+            "type": "object",
+            "properties": {
+                "createdat": {
+                    "type": "string",
+                    "example": "2020-01-29 13:10:39"
+                },
+                "custid": {
+                    "type": "integer",
+                    "example": 4
+                },
+                "firmware": {
+                    "type": "string",
+                    "example": "firmware version"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 4
+                },
+                "name": {
+                    "type": "string",
+                    "example": "viux-38"
+                },
+                "prtcio": {
+                    "type": "string",
+                    "example": "1"
+                },
+                "prtctype": {
+                    "type": "string",
+                    "example": "prtctype"
+                },
+                "rec": {
+                    "type": "string",
+                    "example": "비고"
+                },
+                "tag": {
+                    "type": "string",
+                    "example": "tag"
+                },
+                "type": {
+                    "type": "string",
+                    "example": "??"
+                },
+                "updatedat": {
+                    "type": "string",
+                    "example": "2020-01-29 13:10:39"
+                },
+                "useyn": {
+                    "type": "string",
+                    "example": "Y"
+                }
+            }
+        },
+        "models.Site": {
+            "type": "object",
+            "properties": {
+                "basadr": {
+                    "type": "string",
+                    "example": "서울특별시 강서구 화곡로 132"
+                },
+                "createdat": {
+                    "type": "string",
+                    "example": "2020-01-29 13:10:39"
+                },
+                "custid": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "dtladr": {
+                    "type": "string",
+                    "example": "심당빌딩 3층 301호"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "lat": {
+                    "type": "string",
+                    "example": "32°"
+                },
+                "lon": {
+                    "type": "string",
+                    "example": "24°"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "제주1공장"
+                },
+                "postno": {
+                    "type": "string",
+                    "example": "10232"
+                },
+                "rec": {
+                    "type": "string",
+                    "example": "비고"
+                },
+                "type": {
+                    "type": "string",
+                    "example": "??"
+                },
+                "updatedat": {
+                    "type": "string",
+                    "example": "2020-01-29 13:10:39"
+                },
+                "useyn": {
+                    "type": "string",
+                    "example": "Y"
                 }
             }
         },
@@ -671,6 +1057,13 @@ var doc = `{
                     "example": "Y"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

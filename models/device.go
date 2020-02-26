@@ -5,7 +5,6 @@ type Device struct {
 	DevID      string `json:"id" example:"TD2BDhvjKEaZo37c4DLAq6" xorm:"'dev_id'"`
 	DevNm      string `json:"name" example:"device-37" xorm:"'dev_nm'"`
 	DevTag     string `json:"tag" example:"tag" xorm:"'dev_tag'"`
-	PrtcType   string `json:"prtctype" example:"prtctype" xorm:"'prtc_type'"`
 	DevRec     string `json:"rec" example:"비고" xorm:"'dev_rec'"`
 	Firmware   string `json:"firmware" example:"firmware version" xorm:"'firmware'"`
 	Status     string `json:"status" example:"1" xorm:"'status'"`
